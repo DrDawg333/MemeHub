@@ -228,3 +228,25 @@ img{
 .comment strong{
     color:#fcab60;
 }
+
+.comment-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.delete-comment-btn{
+    background:#2a2a2a;
+    color:#ff6b6b;
+    border:none;
+    border-radius:8px;
+    padding:6px 10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.delete-comment-btn:hover{
+    background:#ff6b6b;
+    color:white;
+    transform:scale(1.05);
+}

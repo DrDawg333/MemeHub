@@ -125,6 +125,31 @@ function Feed() {
         }
     };
 
+    const handleDeleteComment =
+        async (
+            commentId,
+            memeId
+        ) => {
+
+            try {
+
+                await api.delete(
+                    `/comments/${commentId}`
+                );
+
+                fetchComments(
+                    memeId
+                );
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+        };
+
     return (
 
         <div className="feed-container">
@@ -237,12 +262,30 @@ function Feed() {
                                                     className="comment"
                                                 >
 
-                                                    <strong>
-                                                        {
-                                                            comment.user
-                                                                ?.username
-                                                        }
-                                                    </strong>
+                                                    <div
+                                                        className="comment-header"
+                                                    >
+
+                                                        <strong>
+                                                            {
+                                                                comment.user
+                                                                    ?.username
+                                                            }
+                                                        </strong>
+
+                                                        <button
+                                                            className="delete-comment-btn"
+                                                            onClick={() =>
+                                                                handleDeleteComment(
+                                                                    comment._id,
+                                                                    meme._id
+                                                                )
+                                                            }
+                                                        >
+                                                            🗑
+                                                        </button>
+
+                                                    </div>
 
                                                     <p>
                                                         {

@@ -28,6 +28,15 @@ const protect = (req, res, next) => {
             message: "No token"
         });
     }
+    const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET
+    );
+
+    console.log("DECODED JWT:", decoded);
+
+    req.user = decoded;
 };
+
 
 module.exports = protect;
