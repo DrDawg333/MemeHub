@@ -214,11 +214,11 @@ img{
 }
 
 .comment{
-    margin-top:10px;
-    padding:10px;
+    margin-top:12px;
+    padding:12px;
     background:#222;
-    border-radius:8px;
     border-left:3px solid #ff9f43;
+    border-radius:10px;
 }
 
 .comment p{
@@ -226,13 +226,14 @@ img{
 }
 
 .comment strong{
-    color:#fcab60;
+    color:#ff9f43;
 }
 
 .comment-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-bottom:10px;
 }
 
 .delete-comment-btn{
@@ -250,3 +251,27 @@ img{
     color:white;
     transform:scale(1.05);
 }
+
+.comments-section input{
+    width:75%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#2a2a2a;
+    color:white;
+}
+
+.comments-section button{
+    background:#e98d36;
+    color:white;
+    border:none;
+    padding:12px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.comments-section button:hover{
+    transform:scale(1.05);
+}
+
