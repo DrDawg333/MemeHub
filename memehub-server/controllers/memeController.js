@@ -1,4 +1,5 @@
 const Meme = require("../models/Meme");
+const Comment = require("../models/Comment");
 
 const createMeme = async (req, res) => {
     try {
@@ -17,16 +18,52 @@ const createMeme = async (req, res) => {
 };
 
 const getMemes = async (req, res) => {
-    try {
-        const memes = await Meme.find()
-            .populate("user", "username")
-            .sort({ createdAt: -1 });
 
-        res.status(200).json(memes);
+    try {
+
+        const memes = await Meme.find()
+            .populate(
+                "user",
+                "username"
+            )
+            .sort({
+                createdAt: -1
+            });
+
+        const memesWithCounts =
+            await Promise.all(
+
+                memes.map(
+                    async (meme) => {
+
+                        const count =
+                            await Comment.countDocuments({
+                                meme:
+                                    meme._id
+                            });
+
+                        return {
+                            ...meme.toObject(),
+                            commentCount:
+                                count
+                        };
+
+                    }
+                )
+
+            );
+
+        res.status(200).json(
+            memesWithCounts
+        );
+
     } catch (error) {
+
         res.status(500).json({
-            message: error.message,
+            message:
+                error.message
         });
+
     }
 };
 

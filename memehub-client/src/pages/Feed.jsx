@@ -179,7 +179,7 @@ function Feed() {
                                     )
                                 }
                             >
-                                💬 Comments
+                                💬 {meme.commentCount || 0}
                             </button>
 
                         </div>
