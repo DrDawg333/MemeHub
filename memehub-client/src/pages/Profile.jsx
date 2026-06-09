@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useParams } from "react-router-dom";
 
 function Profile() {
+    const currentUserId =
+        localStorage.getItem("userId");
+
+    const { id } = useParams();
 
     const [user, setUser] =
         useState(null);
@@ -10,54 +15,92 @@ function Profile() {
         useState([]);
 
     useEffect(() => {
-
         const fetchProfile = async () => {
-
             try {
+                const profileRes = id
+                    ? await api.get(`/users/${id}`)
+                    : await api.get("/auth/profile");
 
-                const profileRes =
-                    await api.get(
-                        "/auth/profile"
-                    );
+                setUser(profileRes.data);
 
-                setUser(
-                    profileRes.data
-                );
-
-                const memeRes =
-                    await api.get(
-                        "/memes/my"
-                    );
-
-                setMemes(
-                    memeRes.data
-                );
+                const memeRes = id
+                    ? await api.get(`/memes/user/${id}`)
+                    : await api.get("/memes/my");
+                setMemes(memeRes.data);
 
             } catch (error) {
-
-                console.error(
-                    error
-                );
-
+                console.error(error);
             }
         };
 
         fetchProfile();
+    }, [id]);
 
-    }, []);
-
-    const handleDelete = async (id) => {
+    const handleFollow = async () => {
+        console.log("Follow clicked");
 
         try {
+            await api.put(`/users/follow/${id}`);
 
+            console.log("Request sent");
+
+            const profileRes =
+                await api.get(`/users/${id}`);
+
+            setUser(profileRes.data);
+
+        } catch (error) {
+            console.log(error.response?.data);
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async (memeId) => {
+        try {
             await api.delete(
-                `/memes/${id}`
+                `/memes/${memeId}`
             );
 
             setMemes(
                 memes.filter(
-                    meme => meme._id !== id
+                    meme =>
+                        meme._id !== memeId
                 )
+            );
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    console.log("Current User ID:", currentUserId);
+    console.log("Followers Array:", user?.followers);
+
+    if (user?.followers?.length > 0) {
+        console.log(
+            "First follower:",
+            user.followers[0]
+        );
+    }
+    const isFollowing =
+        user?.followers?.includes(
+            currentUserId
+        );
+
+    const handleUnfollow = async () => {
+
+        try {
+
+            await api.put(
+                `/users/unfollow/${id}`
+            );
+
+            const profileRes =
+                await api.get(
+                    `/users/${id}`
+                );
+
+            setUser(
+                profileRes.data
             );
 
         } catch (error) {
@@ -71,81 +114,103 @@ function Profile() {
         return <h1>Loading...</h1>;
 
     return (
+        <div className="profile">
 
-        <div
-            className="profile"
-        >
             <div className="profile-header">
 
+                <h1>{user.username}</h1>
 
-                <h1>
-                    {user.username}
-                </h1>
+                <p>{user.email}</p>
 
-                <p>
-                    {user.email}
-                </p>
+                <p>{user.bio}</p>
 
-                <p>
-                    {user.bio}
-                </p>
+                <div className="follow-stats">
 
-                <h2>
-                    My Memes
-                </h2>
+                    {id &&
+                        id !== currentUserId && (
+                            <button
+                                onClick={
+                                    isFollowing
+                                        ? handleUnfollow
+                                        : handleFollow
+                                }
+                            >
+                                {
+                                    isFollowing
+                                        ? "Unfollow"
+                                        : "Follow"
+                                }
+                            </button>
+                        )}
+
+                    <p>
+                        <strong>
+                            Followers:
+                        </strong>{" "}
+                        {user.followers?.length || 0}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Following:
+                        </strong>{" "}
+                        {user.following?.length || 0}
+                    </p>
+
+                </div>
+
+                <h2>Memes</h2>
+
             </div>
 
+            {memes.map((meme) => (
 
-            {
-                memes.map((meme) => (
+                <div
+                    key={meme._id}
+                    className="meme-card"
+                >
 
-                    <div
-                        key={meme._id}
-                        className="meme-card"
-                    >
+                    <div className="meme-header">
 
-                        <div className="meme-header">
+                        <h3>
+                            {meme.title}
+                        </h3>
+                        {
+                            !id && (
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => {
 
-                            <h3>
-                                {meme.title}
-                            </h3>
+                                        const ok =
+                                            window.confirm(
+                                                "Delete this meme?"
+                                            );
 
-                            <button
-                                className="delete-btn"
-                                onClick={() => {
+                                        if (ok) {
+                                            handleDelete(
+                                                meme._id
+                                            );
+                                        }
+                                    }}
+                                >
+                                    🗑
+                                </button>
+                            )
+                        }
 
-                                    const ok =
-                                        window.confirm(
-                                            "Delete this meme?"
-                                        );
-
-                                    if (ok) {
-
-                                        handleDelete(
-                                            meme._id
-                                        );
-
-                                    }
-
-                                }}
-                            >
-                                🗑
-                            </button>
-
-                        </div>
-
-                        <img
-                            src={meme.imageUrl}
-                            alt={meme.title}
-                        />
 
                     </div>
 
-                ))
-            }
+                    <img
+                        src={meme.imageUrl}
+                        alt={meme.title}
+                    />
+
+                </div>
+
+            ))}
 
         </div>
-
     );
 }
 

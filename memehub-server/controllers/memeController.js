@@ -67,6 +67,33 @@ const getMemes = async (req, res) => {
     }
 };
 
+const getUserMemes = async (req, res) => {
+
+    try {
+
+        const memes =
+            await Meme.find({
+                user: req.params.id
+            })
+            .populate(
+                "user",
+                "username"
+            )
+            .sort({
+                createdAt: -1
+            });
+
+        res.json(memes);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
+
 const likeMeme = async (req, res) => {
     try {
         const meme = await Meme.findById(req.params.id);
@@ -162,5 +189,6 @@ module.exports = {
     getMemes,
     likeMeme,
     getMyMemes,
-    deleteMeme
+    deleteMeme,
+    getUserMemes
 };

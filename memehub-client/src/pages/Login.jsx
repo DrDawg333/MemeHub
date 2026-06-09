@@ -20,17 +20,33 @@ function Login() {
                     password
                 }
             );
+            console.log("FULL RESPONSE:", res.data);
 
             localStorage.setItem(
                 "token",
                 res.data.token
             );
 
+            localStorage.setItem(
+                "userId",
+                res.data.user.id
+            );
+
+            console.log(
+                "Stored User ID:",
+                localStorage.getItem("userId")
+            );
+
+            console.log("Stored:", localStorage.getItem("userId"));
             window.location.href = "/";
 
-            alert("Login Successful");
+            // alert("Login Successful");
 
+            // console.log(res.data);
+            console.log("LOGIN RESPONSE");
             console.log(res.data);
+            console.log(res.data.user);
+            console.log(res.data.user._id);
 
         } catch (error) {
 

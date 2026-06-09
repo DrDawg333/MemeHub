@@ -13,7 +13,7 @@ function App() {
         <BrowserRouter>
 
             <Navbar />
-            
+
             <Routes>
 
                 <Route
@@ -38,6 +38,11 @@ function App() {
 
                 <Route
                     path="/profile"
+                    element={<Profile />}
+                />
+
+                <Route
+                    path="/profile/:id"
                     element={<Profile />}
                 />
 

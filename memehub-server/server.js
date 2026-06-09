@@ -12,6 +12,7 @@ const uploadRoutes =
     require("./routes/uploadRoutes");
 
 connectDB();
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/memes", memeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/users", userRoutes);
 app.get("/", (req, res) => {
     res.send("MemeHub API Running");
 });
