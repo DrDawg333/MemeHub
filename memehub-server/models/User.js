@@ -19,11 +19,6 @@ const userSchema = new mongoose.Schema(
             required: true
         },
 
-        profilePic: {
-            type: String,
-            default: ""
-        },
-
         bio: {
             type: String,
             default: ""
@@ -40,7 +35,12 @@ const userSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User"
             }
-        ]
+        ],
+
+        avatar: {
+            type: String,
+            default: ""
+        }
     },
     {
         timestamps: true

@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");    
+const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
     try {
@@ -101,8 +101,37 @@ const getProfile = async (req, res) => {
     }
 };
 
+const updateAvatar = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const user =
+            await User.findById(
+                req.user.id
+            );
+
+        user.avatar =
+            req.body.avatar;
+
+        await user.save();
+
+        res.json(user);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
+
 module.exports = {
     signup,
     login,
-    getProfile
+    getProfile,
+    updateAvatar
 };
