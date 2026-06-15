@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 function Feed() {
 
@@ -168,7 +169,11 @@ function Feed() {
 
                         <p>
                             Posted by{" "}
-                            {meme.user?.username}
+                            <Link
+                                to={`/profile/${meme.user?._id}`}
+                            >
+                                {meme.user?.username}
+                            </Link>
                         </p>
 
                         <h3>
@@ -266,12 +271,13 @@ function Feed() {
                                                         className="comment-header"
                                                     >
 
-                                                        <strong>
-                                                            {
-                                                                comment.user
-                                                                    ?.username
-                                                            }
-                                                        </strong>
+                                                        <Link
+                                                            to={`/profile/${comment.user?._id}`}
+                                                        >
+                                                            <strong>
+                                                                {comment.user?.username}
+                                                            </strong>
+                                                        </Link>
 
                                                         <button
                                                             className="delete-comment-btn"

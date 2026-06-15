@@ -72,15 +72,9 @@ function Profile() {
             console.error(error);
         }
     };
-    console.log("Current User ID:", currentUserId);
-    console.log("Followers Array:", user?.followers);
+    // console.log("Current User ID:", currentUserId);
+    // console.log("Followers Array:", user?.followers);
 
-    if (user?.followers?.length > 0) {
-        console.log(
-            "First follower:",
-            user.followers[0]
-        );
-    }
     const isFollowing =
         user?.followers?.includes(
             currentUserId
@@ -110,6 +104,52 @@ function Profile() {
         }
     };
 
+    const [avatar, setAvatar] =
+        useState(null);
+
+    const handleAvatarUpload =
+        async (file) => {
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "image",
+                    file
+                );
+
+                const uploadRes =
+                    await api.post(
+                        "/upload",
+                        formData
+                    );
+
+                await api.put(
+                    "/auth/avatar",
+                    {
+                        avatar:
+                            uploadRes.data.imageUrl
+                    }
+                );
+
+                const profileRes =
+                    await api.get(
+                        "/auth/profile"
+                    );
+
+                setUser(
+                    profileRes.data
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+        };
+
     if (!user)
         return <h1>Loading...</h1>;
 
@@ -117,6 +157,51 @@ function Profile() {
         <div className="profile">
 
             <div className="profile-header">
+                <div className="avatar-container">
+
+                    <img
+                        className="profile-avatar"
+                        src={
+                            user.avatar ||
+                            `https://ui-avatars.com/api/?name=${user.username}`
+                        }
+                        alt="avatar"
+                    />
+
+                    {
+                        !id && (
+                            <>
+                                <label
+                                    htmlFor="avatar-upload"
+                                    className="edit-avatar-btn"
+                                >
+                                    ✏️
+                                </label>
+
+                                <input
+                                    id="avatar-upload"
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    onChange={(e) => {
+
+                                        const file =
+                                            e.target.files[0];
+
+                                        if (!file)
+                                            return;
+
+                                        handleAvatarUpload(
+                                            file
+                                        );
+
+                                    }}
+                                />
+                            </>
+                        )
+                    }
+
+                </div>
 
                 <h1>{user.username}</h1>
 

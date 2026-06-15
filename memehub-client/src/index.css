@@ -275,3 +275,65 @@ img{
     transform:scale(1.05);
 }
 
+a {
+    text-decoration: none;
+}
+
+a strong,
+a {
+    color: #ff9f43;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.profile-avatar{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #ff8c5a;
+    display:block;
+    margin:0 auto 20px;
+}
+
+.avatar-container{
+    position:relative;
+    width:160px;
+    margin:0 auto 20px;
+}
+
+.profile-avatar{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #ff8c5a;
+}
+
+.edit-avatar-btn{
+    position:absolute;
+    right:5px;
+    bottom:10px;
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    background:#ff8c5a;
+    color:white;
+}
+
+.upload-avatar-btn{
+    display:block;
+    margin:15px auto;
+}
